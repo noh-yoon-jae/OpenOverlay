@@ -1,0 +1,17 @@
+/web/node_modules/
+/web/.next/
+/web/out/
+/web/dist/
+/web/*.tsbuildinfo
+/node_modules/
+/dist/
+/artifacts/
+/.turbo/
+/.cache/
+/src/**/bin/
+/src/**/obj/
+*.user
+*.suo
+*.log
+Thumbs.db
+Desktop.ini

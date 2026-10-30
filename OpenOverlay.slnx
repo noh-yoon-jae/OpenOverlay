@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="src/OpenOverlay.Core/OpenOverlay.Core.csproj" />
+  <Project Path="src/OpenOverlay.Infrastructure/OpenOverlay.Infrastructure.csproj" />
+  <Project Path="src/OpenOverlay.Service/OpenOverlay.Service.csproj" />
+  <Project Path="src/OpenOverlay.Tests/OpenOverlay.Tests.csproj" />
+</Solution>

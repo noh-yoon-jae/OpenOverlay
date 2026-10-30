@@ -1,0 +1,62 @@
+{
+  "name": "openoverlay",
+  "version": "0.2.0",
+  "description": "A local Spotify lyrics overlay for Windows",
+  "private": true,
+  "packageManager": "pnpm@11.25.0",
+  "main": "desktop/main.cjs",
+  "scripts": {
+    "dev": "concurrently -k \"corepack pnpm --dir web dev\" \"wait-on tcp:3000 && cross-env OPENOVERLAY_UI_DEV=http://127.0.0.1:3000 node desktop/dev-launcher.cjs\"",
+    "build:web": "pnpm --dir web build",
+    "build:backend": "dotnet publish src/OpenOverlay.Service/OpenOverlay.Service.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true -o artifacts/backend",
+    "build": "pnpm build:web && pnpm build:backend && pnpm package:windows",
+    "package:windows": "node scripts/package-windows.cjs",
+    "start": "electron desktop/main.cjs",
+    "typecheck": "pnpm --dir web exec tsc --noEmit",
+    "test:ui": "node --test web/tests/*.test.cjs"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "electron": "^44.9.0",
+    "electron-builder": "^26.0.12",
+    "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "dev.openoverlay.desktop",
+    "productName": "OpenOverlay",
+    "directories": {
+      "output": "artifacts/installers"
+    },
+    "files": [
+      "desktop/**/*",
+      "web/out/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "artifacts/backend",
+        "to": "backend"
+      },
+      {
+        "from": "THIRD-PARTY-NOTICES.md",
+        "to": "THIRD-PARTY-NOTICES.md"
+      },
+      {
+        "from": "src/OpenOverlay.Infrastructure/LICENSES",
+        "to": "licenses"
+      }
+    ],
+    "win": {
+      "icon": "desktop/assets/openoverlay-glass-icon.ico",
+      "target": ["nsis"],
+      "artifactName": "OpenOverlay-${version}-Setup.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "installerIcon": "desktop/assets/openoverlay-glass-icon.ico",
+      "uninstallerIcon": "desktop/assets/openoverlay-glass-icon.ico"
+    }
+  }
+}
